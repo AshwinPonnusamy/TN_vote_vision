@@ -1,6 +1,6 @@
 # Tamil Nadu 2026 - Live Election Dashboard
 
-A real-time, interactive election results dashboard for the Tamil Nadu 2026 Assembly Elections, built with React, Vite, and Tailwind CSS. Features live seat tracking, party trend analysis, historical election archives spanning 1952-2021, and a secure admin panel for data management.
+A real-time, interactive election results dashboard for the Tamil Nadu Assembly Elections, built with React, Vite, and Tailwind CSS. Features live seat tracking, party trend analysis, historical election archives spanning 1952-2021, and a secure admin panel for data management.
 
 ---
 
