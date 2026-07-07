@@ -26,7 +26,7 @@ function AnimatedNumber({ value }) {
   return <span>{display.toLocaleString()}</span>;
 }
 
-export default function LiveResultsPage({ liveSeats, voteShares, constituencies }) {
+export default function LiveResultsPage({ liveSeats, voteShares, constituencies, theme }) {
   const [search, setSearch] = useState('');
   const [partyFilter, setPartyFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -64,7 +64,7 @@ export default function LiveResultsPage({ liveSeats, voteShares, constituencies 
   const hasFilters = search || partyFilter || statusFilter || districtFilter;
 
   return (
-    <div className="min-h-screen bg-[#0B0E17] text-gray-200">
+    <div className="min-h-screen bg-[var(--bg-color)] text-[var(--text-primary)] transition-colors duration-500">
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
         <div className="absolute top-[-200px] right-[-200px] w-[600px] h-[600px] bg-red-600/5 rounded-full blur-3xl" />
         <div className="absolute bottom-[-200px] left-[-200px] w-[600px] h-[600px] bg-blue-600/5 rounded-full blur-3xl" />
@@ -101,10 +101,10 @@ export default function LiveResultsPage({ liveSeats, voteShares, constituencies 
             { label: 'Leading Party', val: leader, icon: <TrendingUp className="text-blue-400 w-5 h-5" />, color: 'blue', isText: true },
             { label: 'Lead Seats', val: liveSeats[leader], icon: <Zap className="text-purple-400 w-5 h-5" />, color: 'purple' },
           ].map((s, i) => (
-            <div key={i} className="glass-card rounded-xl p-4 text-center hover:bg-white/5 transition-all group">
+            <div key={i} className="glass-card rounded-xl p-4 text-center hover:bg-black/5 dark:hover:bg-white/5 transition-all group">
               <div className="flex justify-center mb-2 group-hover:scale-110 transition-transform">{s.icon}</div>
               <div className={cn("text-2xl font-black", s.isText && "text-lg")}>{s.isText ? s.val : <AnimatedNumber value={s.val} />}</div>
-              <div className="text-[10px] text-gray-500 uppercase tracking-wider font-medium">{s.label}</div>
+              <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase tracking-wider font-medium">{s.label}</div>
             </div>
           ))}
         </div>
@@ -116,11 +116,11 @@ export default function LiveResultsPage({ liveSeats, voteShares, constituencies 
               const s = liveSeats[p] || 0, pct = ((s / 234) * 100).toFixed(1);
               return (
                 <button key={p} onClick={() => setPartyFilter(partyFilter === p ? '' : p)}
-                  className={cn("flex-shrink-0 flex items-center gap-3 px-5 py-3 rounded-xl transition-all cursor-pointer border", partyFilter === p ? "bg-white/10 border-white/20" : "bg-white/[0.02] border-white/5 hover:bg-white/5")}>
+                  className={cn("flex-shrink-0 flex items-center gap-3 px-5 py-3 rounded-xl transition-all cursor-pointer border", partyFilter === p ? "bg-black/10 dark:bg-white/10 border-black/20 dark:border-white/20" : "bg-black/[0.01] dark:bg-white/[0.02] border-black/5 dark:border-white/5 hover:bg-black/5 dark:hover:bg-white/5")}>
                   <span className="w-3 h-3 rounded-full" style={{ backgroundColor: PARTY_COLORS[p] }} />
                   <span className="font-bold text-sm">{p}</span>
                   <span className="text-lg font-black" style={{ color: PARTY_COLORS[p] }}>{s}</span>
-                  <div className="w-16 bg-gray-800 rounded-full h-1.5 overflow-hidden"><div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, backgroundColor: PARTY_COLORS[p] }} /></div>
+                  <div className="w-16 bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 overflow-hidden"><div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, backgroundColor: PARTY_COLORS[p] }} /></div>
                 </button>
               );
             })}
@@ -134,22 +134,22 @@ export default function LiveResultsPage({ liveSeats, voteShares, constituencies 
             <div className="relative flex-1 min-w-[200px]">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
               <input type="text" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search constituency or candidate..."
-                className="w-full bg-gray-800/50 border border-white/10 text-sm rounded-xl pl-10 pr-4 py-2.5 outline-none focus:ring-1 ring-red-500 transition-all" />
+                className="w-full bg-gray-100 dark:bg-gray-800/50 border border-black/10 dark:border-white/10 text-sm rounded-xl pl-10 pr-4 py-2.5 outline-none focus:ring-1 ring-red-500 transition-all" />
             </div>
-            <select value={districtFilter} onChange={e => setDistrictFilter(e.target.value)} className="bg-gray-800/50 border border-white/10 text-xs rounded-xl px-4 py-2.5 outline-none focus:ring-1 ring-red-500">
+            <select value={districtFilter} onChange={e => setDistrictFilter(e.target.value)} className="bg-gray-100 dark:bg-gray-800/50 border border-black/10 dark:border-white/10 text-xs rounded-xl px-4 py-2.5 outline-none focus:ring-1 ring-red-500">
               <option value="">All Districts</option>
               {districts.map(d => <option key={d} value={d}>{d}</option>)}
             </select>
-            <select value={partyFilter} onChange={e => setPartyFilter(e.target.value)} className="bg-gray-800/50 border border-white/10 text-xs rounded-xl px-4 py-2.5 outline-none focus:ring-1 ring-red-500">
+            <select value={partyFilter} onChange={e => setPartyFilter(e.target.value)} className="bg-gray-100 dark:bg-gray-800/50 border border-black/10 dark:border-white/10 text-xs rounded-xl px-4 py-2.5 outline-none focus:ring-1 ring-red-500">
               <option value="">All Parties</option>
               {PARTIES.map(p => <option key={p} value={p}>{p}</option>)}
             </select>
-            <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="bg-gray-800/50 border border-white/10 text-xs rounded-xl px-4 py-2.5 outline-none focus:ring-1 ring-red-500">
+            <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="bg-gray-100 dark:bg-gray-800/50 border border-black/10 dark:border-white/10 text-xs rounded-xl px-4 py-2.5 outline-none focus:ring-1 ring-red-500">
               <option value="">All Status</option>
               <option value="Won">Won</option><option value="Leading">Leading</option><option value="Tight Fight">Tight Fight</option>
             </select>
             <select value={`${sortBy}-${sortDir}`} onChange={e => { const [b, d] = e.target.value.split('-'); setSortBy(b); setSortDir(d); }}
-              className="bg-gray-800/50 border border-white/10 text-xs rounded-xl px-4 py-2.5 outline-none focus:ring-1 ring-red-500">
+              className="bg-gray-100 dark:bg-gray-800/50 border border-black/10 dark:border-white/10 text-xs rounded-xl px-4 py-2.5 outline-none focus:ring-1 ring-red-500">
               <option value="margin-desc">Highest Margin</option><option value="margin-asc">Lowest Margin</option>
               <option value="rounds-desc">Most Rounds</option><option value="rounds-asc">Least Rounds</option>
               <option value="name-asc">Name A-Z</option><option value="name-desc">Name Z-A</option>
@@ -210,34 +210,34 @@ export default function LiveResultsPage({ liveSeats, voteShares, constituencies 
                 </div>
 
                 <div className="grid grid-cols-3 gap-3">
-                  <div className="bg-black/20 rounded-lg p-2.5 text-center">
-                    <div className="text-green-400 font-mono font-bold text-sm">+{c.margin.toLocaleString()}</div>
+                  <div className="bg-black/5 dark:bg-black/20 rounded-lg p-2.5 text-center">
+                    <div className="text-green-600 dark:text-green-400 font-mono font-bold text-sm">+{c.margin.toLocaleString()}</div>
                     <div className="text-[9px] text-gray-500 uppercase mt-0.5">Margin</div>
                   </div>
-                  <div className="bg-black/20 rounded-lg p-2.5 text-center">
-                    <div className="text-gray-300 font-mono font-bold text-sm">{c.rounds}/18</div>
+                  <div className="bg-black/5 dark:bg-black/20 rounded-lg p-2.5 text-center">
+                    <div className="text-gray-700 dark:text-gray-300 font-mono font-bold text-sm">{c.rounds}/18</div>
                     <div className="text-[9px] text-gray-500 uppercase mt-0.5">Rounds</div>
                   </div>
-                  <div className="bg-black/20 rounded-lg p-2.5 text-center">
-                    <div className="text-blue-400 font-mono font-bold text-sm">{((c.rounds / 18) * 100).toFixed(0)}%</div>
+                  <div className="bg-black/5 dark:bg-black/20 rounded-lg p-2.5 text-center">
+                    <div className="text-blue-600 dark:text-blue-400 font-mono font-bold text-sm">{((c.rounds / 18) * 100).toFixed(0)}%</div>
                     <div className="text-[9px] text-gray-500 uppercase mt-0.5">Done</div>
                   </div>
                 </div>
 
                 {/* Progress */}
                 <div className="mt-3">
-                  <div className="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
+                  <div className="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 overflow-hidden">
                     <div className="h-full rounded-full transition-all duration-700" style={{ width: `${(c.rounds / 18) * 100}%`, backgroundColor: PARTY_COLORS[c.party] }} />
                   </div>
                 </div>
 
                 {/* Expanded Detail */}
                 {selectedConstituency?.name === c.name && (
-                  <div className="mt-4 pt-4 border-t border-white/5 space-y-2 text-xs text-gray-400">
-                    <div className="flex justify-between"><span>Voter Turnout</span><span className="text-white font-mono">{(82 + Math.random() * 6).toFixed(1)}%</span></div>
-                    <div className="flex justify-between"><span>Total Votes Cast</span><span className="text-white font-mono">{(150000 + Math.floor(Math.random() * 50000)).toLocaleString()}</span></div>
-                    <div className="flex justify-between"><span>EVM Machines</span><span className="text-white font-mono">{Math.floor(Math.random() * 50 + 200)}</span></div>
-                    <div className="flex justify-between"><span>Postal Ballots</span><span className="text-white font-mono">{Math.floor(Math.random() * 2000 + 500)}</span></div>
+                  <div className="mt-4 pt-4 border-t border-black/5 dark:border-white/5 space-y-2 text-xs text-gray-500 dark:text-gray-400">
+                    <div className="flex justify-between"><span>Voter Turnout</span><span className="text-[var(--text-primary)] font-mono">{(82 + Math.random() * 6).toFixed(1)}%</span></div>
+                    <div className="flex justify-between"><span>Total Votes Cast</span><span className="text-[var(--text-primary)] font-mono">{(150000 + Math.floor(Math.random() * 50000)).toLocaleString()}</span></div>
+                    <div className="flex justify-between"><span>EVM Machines</span><span className="text-[var(--text-primary)] font-mono">{Math.floor(Math.random() * 50 + 200)}</span></div>
+                    <div className="flex justify-between"><span>Postal Ballots</span><span className="text-[var(--text-primary)] font-mono">{Math.floor(Math.random() * 2000 + 500)}</span></div>
                   </div>
                 )}
               </div>
@@ -254,7 +254,7 @@ export default function LiveResultsPage({ liveSeats, voteShares, constituencies 
           </div>
         )}
 
-        <footer className="text-center py-6 border-t border-white/5"><p className="text-[11px] text-gray-500">Live counting results · Auto-refreshes every 3s · TN Assembly 2026</p></footer>
+        <footer className="text-center py-6 border-t border-black/5 dark:border-white/5"><p className="text-[11px] text-gray-500">Live counting results · Auto-refreshes every 3s · TN Assembly 2026</p></footer>
       </div>
     </div>
   );
