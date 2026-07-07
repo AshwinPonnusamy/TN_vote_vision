@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { AlertTriangle, Volume2, VolumeX } from 'lucide-react';
 
 export default function TightContests({ constituencies, soundEnabled, setSoundEnabled }) {
@@ -31,3 +32,9 @@ export default function TightContests({ constituencies, soundEnabled, setSoundEn
     </div>
   );
 }
+
+TightContests.propTypes = {
+  constituencies: PropTypes.arrayOf(PropTypes.object).isRequired,
+  soundEnabled: PropTypes.bool.isRequired,
+  setSoundEnabled: PropTypes.func.isRequired,
+};

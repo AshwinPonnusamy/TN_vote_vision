@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Trophy } from 'lucide-react';
 
 export default function Leaderboard({ constituencies }) {
@@ -30,3 +31,7 @@ export default function Leaderboard({ constituencies }) {
     </div>
   );
 }
+
+Leaderboard.propTypes = {
+  constituencies: PropTypes.arrayOf(PropTypes.object).isRequired,
+};

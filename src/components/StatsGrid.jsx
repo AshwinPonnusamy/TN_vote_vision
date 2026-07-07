@@ -1,15 +1,19 @@
+import PropTypes from 'prop-types';
 import { CheckCircle, Flag, Activity, TrendingUp, Gavel, Users } from 'lucide-react';
+import { STATE_METADATA } from '../constants/data';
 
-export default function StatsGrid({ liveSeats, isTamil }) {
-  const totalCounted = Object.values(liveSeats).reduce((a, b) => a + b, 0);
+export default function StatsGrid({ liveSeats, leadingCount, wonCount, isTamil, selectedState }) {
+  const safeLiveSeats = liveSeats || {};
+  const totalCounted = Object.values(safeLiveSeats).reduce((a, b) => a + b, 0);
+  const meta = STATE_METADATA[selectedState] || STATE_METADATA['S22'];
 
   const stats = [
-    { label: isTamil ? 'மொத்த இடங்கள்' : 'Total Seats', val: 234, icon: <CheckCircle className="text-red-400" /> },
-    { label: isTamil ? 'பெரும்பான்மை' : 'Majority Mark', val: 118, icon: <Flag className="text-yellow-400" /> },
+    { label: isTamil ? 'மொத்த இடங்கள்' : 'Total Seats', val: meta.seats, icon: <CheckCircle className="text-red-400" /> },
+    { label: isTamil ? 'பெரும்பான்மை' : 'Majority Mark', val: meta.majority, icon: <Flag className="text-yellow-400" /> },
     { label: isTamil ? 'எண்ணப்பட்டவை' : 'Counted Seats', val: totalCounted, icon: <Activity className="text-green-400" /> },
-    { label: isTamil ? 'முன்னிலை' : 'Leading Seats', val: totalCounted, icon: <TrendingUp className="text-blue-400" /> },
-    { label: isTamil ? 'அறிவிக்கப்பட்டவை' : 'Declared Seats', val: Math.floor(Math.random() * 30) + 50, icon: <Gavel className="text-purple-400" /> },
-    { label: isTamil ? 'வாக்குப்பதிவு %' : 'Turnout %', val: (84.2 + Math.random()).toFixed(1) + '%', icon: <Users className="text-teal-400" /> },
+    { label: isTamil ? 'முன்னிலை' : 'Leading', val: leadingCount || 0, icon: <TrendingUp className="text-blue-400" /> },
+    { label: isTamil ? 'வெற்றி' : 'Won', val: wonCount || 0, icon: <Gavel className="text-purple-400" /> },
+    { label: isTamil ? 'வாக்குப்பதிவு %' : 'Turnout %', val: '72.5%', icon: <Users className="text-teal-400" /> },
   ];
 
   return (
@@ -24,3 +28,11 @@ export default function StatsGrid({ liveSeats, isTamil }) {
     </div>
   );
 }
+
+StatsGrid.propTypes = {
+  liveSeats: PropTypes.object.isRequired,
+  leadingCount: PropTypes.number.isRequired,
+  wonCount: PropTypes.number.isRequired,
+  isTamil: PropTypes.bool.isRequired,
+  selectedState: PropTypes.string.isRequired,
+};
